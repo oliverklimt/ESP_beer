@@ -1,3 +1,5 @@
+#include "images.h"
+
 const int numReadings = 60;
 
 const int rezistor = 22000;
