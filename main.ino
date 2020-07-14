@@ -2,6 +2,7 @@
 
 const int numReadings = 60;
 
+/* Termistor settings */
 const int rezistor = 22000;
 const int termNom = 22000;
 const int refTemp = 25;
@@ -13,11 +14,12 @@ int readIndex = 0;              // the index of the current reading
 float total = 0;                  // the running total
 float average = 0;                // the average
 
-const int inputPin = A0;
+const int inputPin = A0; // THERMISTOR PIN
 
 
 
 void setup() {
+	Serial.begin(11520);
 	for (int thisReading = 0; thisReading < numReadings; thisReading++) {
 	readings[thisReading] = 0; // set the array to 0 on all positions
   	}
@@ -54,7 +56,8 @@ void loop() {
 	temp = 1.0 / temp;
 	temp -= 273.15; // NOW there is the FINAL TEMP
 
-
+	Serial.println(temp);
+	
 
 
 	delay(1);        // delay in between reads for stability
