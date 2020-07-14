@@ -17,10 +17,14 @@ float total = 0;                  // the running total
 float average = 0;                // the average
 
 const int inputPin = A0; // THERMISTOR PIN
-
+const int buttonPin = 0;
+const int ledPin = 25;
 
 
 void setup() {
+	pinMode(ledPin, OUTPUT);
+	pinMode(buttonPin, INPUT);
+
 	Heltec.begin(true /*DisplayEnable Enable*/, false /*LoRa Disable*/, true /*Serial Enable*/);
 	Heltec.display->flipScreenVertically();
 	Heltec.display->clear();
@@ -68,6 +72,11 @@ void loop() {
 
 	Serial.println(temp);
 	
+	if(digitalRead(buttonPin)==HIGH){
+		Heltec.display->drawString(0, 0, "Teplota: ");
+		Heltec.display->drawString(0, 10, String(temp));
+	}
+	else{Heltec.display->clear();}
 
 
 	delay(1);        // delay in between reads for stability
