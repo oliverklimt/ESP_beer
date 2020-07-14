@@ -1,3 +1,5 @@
+#include "Arduino.h"
+#include "heltec.h"
 #include "images.h"
 
 const int numReadings = 60;
@@ -19,6 +21,14 @@ const int inputPin = A0; // THERMISTOR PIN
 
 
 void setup() {
+	Heltec.begin(true /*DisplayEnable Enable*/, false /*LoRa Disable*/, true /*Serial Enable*/);
+	Heltec.display->flipScreenVertically();
+	Heltec.display->clear();
+	Heltec.display->setFont(ArialMT_Plain_10);
+
+	Heltec.display->drawXbm(0, 0, nerudny_logo_width, nerudny_logo_height, nerudny_logo_bits);
+	delay(2000);
+
 	Serial.begin(11520);
 	for (int thisReading = 0; thisReading < numReadings; thisReading++) {
 	readings[thisReading] = 0; // set the array to 0 on all positions
