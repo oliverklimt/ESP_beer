@@ -2,7 +2,8 @@
 #include "heltec.h"
 #include "images.h"
 
-const int numReadings = 60;
+const int numReadings = 100;
+
 
 /* Termistor settings */
 const int rezistor = 22000;
@@ -16,10 +17,14 @@ int readIndex = 0;              // the index of the current reading
 float total = 0;                  // the running total
 float average = 0;                // the average
 
-const int inputPin = A0; // THERMISTOR PIN
+float tempDiffArr[60];
+int tempDiffIndex = 0;
+
+const int inputPin = 34; // THERMISTOR PIN
 const int buttonPin = 0;
 const int ledPin = 25;
 
+unsigned long interval = 1000;
 
 void setup() {
 	pinMode(ledPin, OUTPUT);
@@ -40,6 +45,8 @@ void setup() {
 }
 
 void loop() {
+	unsigned long currMillis = Millis();
+
 	// subtract the last reading:
 	total = total - readings[readIndex];
 	// read from the sensor:
@@ -81,3 +88,11 @@ void loop() {
 
 	delay(1);        // delay in between reads for stability
 }
+
+double ReadVoltage(byte pin){
+  double reading = analogRead(pin); // Reference voltage is 3v3 so maximum reading is 3v3 = 4095 in range 0 to 4095
+  if(reading < 1 || reading >= 4095)
+    //return 0;
+  // return -0.000000000009824 * pow(reading,3) + 0.000000016557283 * pow(reading,2) + 0.000854596860691 * reading + 0.065440348345433;
+  return -0.000000000000016 * pow(reading,4) + 0.000000000118171 * pow(reading,3)- 0.000000301211691 * pow(reading,2)+ 0.001109019271794 * reading + 0.034143524634089;
+} // Added an improved polynomial, use either, comment out as required
