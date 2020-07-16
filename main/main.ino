@@ -19,7 +19,7 @@ float average = 0;                // the average
 
 float tempDiffArr[60];
 unsigned long tempDiffIndex = 0;
-float tempDiff
+float tempDiff;
 
 const int inputPin = 13; // THERMISTOR PIN
 const int ledPin = 25;
@@ -31,7 +31,6 @@ unsigned long LEDMillis;
 
 void setup() {
 	pinMode(ledPin, OUTPUT);
-	pinMode(buttonPin, INPUT);
 
 	Heltec.begin(true /*DisplayEnable Enable*/, false /*LoRa Disable*/, true /*Serial Enable*/);
 	Heltec.display->flipScreenVertically();
@@ -48,7 +47,7 @@ void setup() {
 	for (int thisReading = 0; thisReading < 60; thisReading++) {
 	tempDiffArr[thisReading] = 0;
   	}
-	startMillis = millis()
+	startMillis = millis();
 }
 
 void loop() {
@@ -91,12 +90,12 @@ void loop() {
 
 		diffTempArr[tempDiffIndex] = temp;
 		tempDiffIndex++;
-		if (tempDiffIndex>=60){tempDiffIndex=0}
+		if (tempDiffIndex>=60){tempDiffIndex=0;}
 		startMillis = currMillis;
 	}
 	
-	if(tempDiffIndex == 59){tempDiff = tempDiffArr[59] - tempDiffArr[0]}
-	else{tempDiff = tempDiffArr[tempDiffIndex]-tempDiffArr[tempDiffIndex+1]}
+	if(tempDiffIndex == 59){tempDiff = tempDiffArr[59] - tempDiffArr[0];}
+	else{tempDiff = tempDiffArr[tempDiffIndex]-tempDiffArr[tempDiffIndex+1];}
 
 	Heltec.display->drawString(0, 0, "Teplota: ");
 	Heltec.display->drawString(0, 10, String(temp));
