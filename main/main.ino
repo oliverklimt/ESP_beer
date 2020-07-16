@@ -88,7 +88,7 @@ void loop() {
 	if(!(currMillis - startMillis >= interval)){
 		// save to diffTempArr
 
-		diffTempArr[tempDiffIndex] = temp;
+		tempDiffArr[tempDiffIndex] = temp;
 		tempDiffIndex++;
 		if (tempDiffIndex>=60){tempDiffIndex=0;}
 		startMillis = currMillis;
