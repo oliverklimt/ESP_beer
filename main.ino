@@ -18,13 +18,16 @@ float total = 0;                  // the running total
 float average = 0;                // the average
 
 float tempDiffArr[60];
-int tempDiffIndex = 0;
+unsigned long tempDiffIndex = 0;
+float tempDiff
 
-const int inputPin = 34; // THERMISTOR PIN
-const int buttonPin = 0;
+const int inputPin = 13; // THERMISTOR PIN
 const int ledPin = 25;
 
-unsigned long interval = 1000;
+const unsigned long interval = 1000;
+unsigned long startMillis;
+
+unsigned long LEDMillis;
 
 void setup() {
 	pinMode(ledPin, OUTPUT);
@@ -42,15 +45,19 @@ void setup() {
 	for (int thisReading = 0; thisReading < numReadings; thisReading++) {
 	readings[thisReading] = 0; // set the array to 0 on all positions
   	}
+	for (int thisReading = 0; thisReading < 60; thisReading++) {
+	tempDiffArr[thisReading] = 0;
+  	}
+	startMillis = millis()
 }
 
 void loop() {
-	unsigned long currMillis = Millis();
+	unsigned long currMillis = millis();
 
 	// subtract the last reading:
 	total = total - readings[readIndex];
 	// read from the sensor:
-	readings[readIndex] = analogRead(inputPin);
+	readings[readIndex] = ReadVoltage(inputPin);
 	// add the reading to the total:
 	total = total + readings[readIndex];
 	// advance to the next position in the array:
@@ -78,12 +85,24 @@ void loop() {
 	temp -= 273.15; // NOW there is the FINAL TEMP
 
 	Serial.println(temp);
-	
-	if(digitalRead(buttonPin)==HIGH){
-		Heltec.display->drawString(0, 0, "Teplota: ");
-		Heltec.display->drawString(0, 10, String(temp));
+	// 1 second pause
+	if(!(currMillis - startMillis >= interval)){
+		// save to diffTempArr
+
+		diffTempArr[tempDiffIndex] = temp;
+		tempDiffIndex++;
+		if (tempDiffIndex>=60){tempDiffIndex=0}
+		startMillis = currMillis;
 	}
-	else{Heltec.display->clear();}
+	
+	if(tempDiffIndex == 59){tempDiff = tempDiffArr[59] - tempDiffArr[0]}
+	else{tempDiff = tempDiffArr[tempDiffIndex]-tempDiffArr[tempDiffIndex+1]}
+
+	Heltec.display->drawString(0, 0, "Teplota: ");
+	Heltec.display->drawString(0, 10, String(temp));
+	Heltec.display->drawString(0, 20, "Prirustek: ");
+	Heltec.display->drawString(0, 30, String(tempDiff));
+
 
 
 	delay(1);        // delay in between reads for stability
