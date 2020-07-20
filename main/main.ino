@@ -6,7 +6,7 @@ const int numReadings = 100;
 
 
 /* Termistor settings */
-const int rezistor = 22000;
+const int rezistor = 47000; //22000
 const int termNom = 22000;
 const int refTemp = 25;
 const int beta = 3950;
@@ -38,9 +38,10 @@ void setup() {
 	Heltec.display->setFont(ArialMT_Plain_10);
 
 	Heltec.display->drawXbm(0, 0, nerudny_logo_width, nerudny_logo_height, nerudny_logo_bits);
+	Heltec.display->display();
 	delay(2000);
 
-	Serial.begin(11520);
+	Serial.begin(115200);
 	for (int thisReading = 0; thisReading < numReadings; thisReading++) {
 	readings[thisReading] = 0; // set the array to 0 on all positions
   	}
@@ -72,7 +73,7 @@ void loop() {
 	average = total / numReadings; // THIS!!!
 	// send it to the computer as ASCII digits
 	
-	average = 4095 - average - 1;
+	average = 4095 / average - 1;
 	average = rezistor / average;
 
 	float temp;
@@ -97,14 +98,15 @@ void loop() {
 	if(tempDiffIndex == 59){tempDiff = tempDiffArr[59] - tempDiffArr[0];}
 	else{tempDiff = tempDiffArr[tempDiffIndex]-tempDiffArr[tempDiffIndex+1];}
 
+  Heltec.display->clear();
 	Heltec.display->drawString(0, 0, "Teplota: ");
 	Heltec.display->drawString(0, 10, String(temp));
 	Heltec.display->drawString(0, 20, "Prirustek: ");
 	Heltec.display->drawString(0, 30, String(tempDiff));
+  Heltec.display->display();
 
 
-
-	delay(1);        // delay in between reads for stability
+	delay(10);        // delay in between reads for stability
 }
 
 double ReadVoltage(byte pin){
