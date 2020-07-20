@@ -95,15 +95,14 @@ void loop() {
 		startMillis = currMillis;
 	}
 	
-	if(tempDiffIndex == 59){tempDiff = tempDiffArr[59] - tempDiffArr[0];}
-	else{tempDiff = tempDiffArr[tempDiffIndex]-tempDiffArr[tempDiffIndex+1];}
+	tempDiff = tempDiffArr[tempDiffIndex%60] - tempDiffArr[(tempDiffIndex+59)%60];
 
-  Heltec.display->clear();
+  	Heltec.display->clear();
 	Heltec.display->drawString(0, 0, "Teplota: ");
 	Heltec.display->drawString(0, 10, String(temp));
 	Heltec.display->drawString(0, 20, "Prirustek: ");
 	Heltec.display->drawString(0, 30, String(tempDiff));
-  Heltec.display->display();
+  	Heltec.display->display();
 
 
 	delay(10);        // delay in between reads for stability
