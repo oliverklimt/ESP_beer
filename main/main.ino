@@ -38,6 +38,8 @@ void setup() {
 	Heltec.display->setFont(ArialMT_Plain_10);
 
 	Heltec.display->drawXbm(0, 0, nerudny_logo_width, nerudny_logo_height, nerudny_logo_bits);
+  Heltec.display->drawString(50, 20, "Nerudny");
+  Heltec.display->drawString(50, 30, "lezak");
 	Heltec.display->display();
 	delay(2000);
 
